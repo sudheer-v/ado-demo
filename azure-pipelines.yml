@@ -28,7 +28,8 @@ stages:
         SonarQube: 'sonarqube-testing'
         scannerMode: 'CLI'
         configMode: 'manual'
-        cliProjectKey: 'demo'
+        cliProjectKey: 'demo_demo_AYGLOhAfqBLbUT6n0AKj'
+        cliSources: '.'
         
     - task: SonarQubeAnalyze@5
     - task: SonarQubePublish@5
