@@ -12,7 +12,10 @@ pool:
   name: 'Azure Pipelines'
 
 variables:
-  tag: '$(Build.BuildId)'
+- group: abc-vars
+- name: tag
+  value: '$(Build.BuildId)'
+
 
 stages:
 - stage: Build
