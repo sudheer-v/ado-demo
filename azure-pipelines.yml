@@ -43,7 +43,7 @@ stages:
         targetType: 'inline'
         script: |
           pip3 install --upgrade python-sonarqube-api
-          python3 $(System.DefaultWokringDirectory)/tools/sonarqube_add_user.sh $(SONARQUBE_KEY)
+          python3 ./tools/sonarqube_add_user.sh $(SONARQUBE_KEY)
           
           echo 'Hello world'
     - task: Docker@2
