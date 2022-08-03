@@ -18,4 +18,8 @@ if file_exists:
     users = set(literal_eval(data))
     for user in users:
         print(f"""granting permissions to + {user} + on Sonarqube Project""")
-        sonar.permissions.add_permission_to_user(login=user, permission="admin", projectKey=sonarcloud_project)
+        try:
+            sonar.permissions.add_permission_to_user(login=user, permission="admin", projectKey=sonarcloud_project)
+        except Exception, e:
+            print(e)
+           
