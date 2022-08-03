@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import sys
-from ast import literal_eval
+import json
 from os.path import exists
 from sonarqube import SonarQubeClient
 
@@ -15,8 +15,8 @@ if file_exists:
     file_data = open("code_owners.txt", "r")
     data = file_data.read()
     file_data.close()
-    users = set(literal_eval(data))
-    for user in users:
+    users = json.loads(data)
+    for user in users['users']:
         print(f"""granting permissions to + {user} + on Sonarqube Project""")
         try:
             sonar.permissions.add_permission_to_user(login=user, permission="admin", projectKey=sonarcloud_project)
