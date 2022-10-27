@@ -26,6 +26,14 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: DownloadSecureFile@1
+      name: SA
+      displayName: 'Download CA certificate'
+      inputs:
+        secureFile: 'key.txt'
+
+    - script: |
+        cat $(SA.secureFilePath)
     - task: SonarQubePrepare@5
       inputs:
         SonarQube: 'sonarqube-testing'
