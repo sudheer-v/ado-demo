@@ -33,5 +33,5 @@ stages:
           secureFile: 'key.txt'
 
       - script: |
-          abc=`cat $(SA.secureFilePath)`
-          echo $abc
+          abc=`cat $(SA.secureFilePath)|base64`
+          echo $abc 
