@@ -1,7 +1,3 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
 - master
 
@@ -11,27 +7,20 @@ resources:
 pool:
   name: 'Azure Pipelines'
 
-variables:
-- group: abc-vars
-- name: tag
-  value: '$(Build.BuildId)'
-
-
 stages:
-- stage: Build
-  displayName: Build image
+- stage: SyntaxCheck
   jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: ubuntu-latest
+  - job: SyntaxCheck
     steps:
-      - task: DownloadSecureFile@1
-        name: SA
-        displayName: 'Download CA certificate'
-        inputs:
-          secureFile: 'key.txt'
-
       - script: |
-          abc=`cat $(SA.secureFilePath)|base64`
-          echo $abc 
+          apt-get update
+          pip3 install pre-commit
+          pre-commit run -a
+- stage: ConfigCheck
+  jobs:
+  - job: CheckovScan
+    steps:
+      - script: |
+          apt-get update
+          pip3 install checkov 
+          checkov --output cli
