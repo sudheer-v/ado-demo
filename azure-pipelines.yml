@@ -33,13 +33,13 @@ stages:
       - task: Docker@2
         inputs:
           command: build 
-          repository: ado-cicd-demo/sample-app
+          repository: devopscounsel/ado-cicd-demo/sample-app
           Dockerfile: Dockerfile
           tags: $(COMMIT_ID)
       - task: Docker@2
         inputs:
           command: save
-          arguments: --output $(Build.ArtifactStagingDirectory)/sample-app.tar ado-cicd-demo/sample-app:$(COMMIT_ID)
+          arguments: --output $(Build.ArtifactStagingDirectory)/sample-app.tar devopscounsel/ado-cicd-demo/sample-app:$(COMMIT_ID)
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: $(Build.ArtifactStagingDirectory)
@@ -63,7 +63,7 @@ stages:
            echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
            sudo apt-get update
            sudo apt-get install trivy
-           trivy image ado-cicd-demo/sample-app:$(COMMIT_ID)
+           trivy image devopscounsel/ado-cicd-demo/sample-app:$(COMMIT_ID)
 - stage: SignAndPush
   jobs: 
   - job: SignAndPush
@@ -80,7 +80,7 @@ stages:
       - task: Docker@2
         inputs:
           command: push 
-          repository: ado-cicd-demo/sample-app
+          repository: devopscounsel/ado-cicd-demo/sample-app
           containerRegistry: devops-counsel-docker-registry
           tags: |
             $(COMMIT_ID)
