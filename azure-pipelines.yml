@@ -63,7 +63,7 @@ stages:
            echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
            sudo apt-get update
            sudo apt-get install trivy
-           trivy image docker.io/devopscounsel/ado-cicd-demo/sample-app-$(COMMIT_ID)
+           trivy image devopscounsel/ado-cicd-demo/sample-app-$(COMMIT_ID)
 - stage: SignAndPush
   jobs: 
   - job: SignAndPush
