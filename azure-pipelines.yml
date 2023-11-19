@@ -43,8 +43,7 @@ stages:
       - task: PublishBuildArtifacts@1
         inputs:
           PathtoPublish: $(Build.ArtifactStagingDirectory)
-          ArtifactName: dockerImage
-          publishLocation: demo
+
 - stage: Scan
   jobs: 
   - job: Scan
@@ -55,7 +54,7 @@ stages:
         inputs:
           buildType: current
           downloadType: single
-          artifactName: dockerImage
+          artifactName: drop
           downloadPath: $(System.ArtifactsDirectory)
       - task: Docker@2
         inputs:
