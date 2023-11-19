@@ -36,8 +36,31 @@ stages:
           repository: devopscounsel/ado-cicd-demo/sample-app
           Dockerfile: Dockerfile
           tags: $(COMMIT_ID)
+      - task: Docker@2
+        inputs:
+          command: save
+          arguments: --output $(Build.ArtifactStagingDirectory)/sample-app.tar devopscounsel/ado-cicd-demo/sample-app:$(COMMIT_ID)
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: $(Build.ArtifactStagingDirectory)
+          ArtifactName: dockerImage
+          publishLocation: demo
+- stage: Scan
+  jobs: 
   - job: Scan
     steps:
+      - script: |
+          echo "##vso[task.setvariable variable=COMMIT_ID]`git rev-parse --short HEAD`"
+      - task: DownloadBuildArtifacts@1
+        inputs:
+          buildType: current
+          downloadType: single
+          artifactName: dockerImage
+          downloadPath: $(System.ArtifactsDirectory)
+      - task: Docker@2
+        inputs:
+          command: load 
+          arguments: --input $(System.ArtifactsDirectory)/demo/sample-app.tar
       - script: |
            sudo apt-get install wget apt-transport-https gnupg lsb-release
            wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
@@ -45,8 +68,22 @@ stages:
            sudo apt-get update
            sudo apt-get install trivy
            trivy image devopscounsel/ado-cicd-demo/sample-app-$(COMMIT_ID)
-  - job: Push
+- stage: SignAndPush
+  jobs: 
+  - job: SignAndPush
     steps:
+      - script: |
+          echo "##vso[task.setvariable variable=COMMIT_ID]`git rev-parse --short HEAD`"
+      - task: DownloadBuildArtifacts@1
+        inputs:
+          buildType: current
+          downloadType: single
+          artifactName: dockerImage
+          downloadPath: '$(System.ArtifactsDirectory)'
+      - task: Docker@2
+        inputs:
+          command: load 
+          arguments: --input $(System.ArtifactsDirectory)/demo/sample-app.tar
       - task: Docker@2
         inputs:
           command: push 
@@ -54,12 +91,3 @@ stages:
           containerRegistry: 
           tags: |
             $(COMMIT_ID)
-
-
-
-
-
-
-
-
-
