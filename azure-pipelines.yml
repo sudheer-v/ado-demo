@@ -76,7 +76,7 @@ stages:
       - task: Docker@2
         inputs:
           command: load 
-          arguments: --input $(System.ArtifactsDirectory)/demo/sample-app.tar
+          arguments: --input $(System.ArtifactsDirectory)/drop/sample-app.tar
       - task: Docker@2
         inputs:
           command: push 
